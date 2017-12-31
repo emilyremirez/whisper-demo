@@ -1,0 +1,2632 @@
+
+<!-- saved from url=(0066)http://linguistics.berkeley.edu/~susanlin/mturk_remirez/mturk.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>
+//written by Morris Alper -- January 2013
+//you may copy with attribution
+
+//Navigation.js: provides functionality for multi-page surveys
+
+var current = 1; //the current page
+
+var moved = []; //pages which have been moved by the randomization
+var movedto = [];
+
+//takes randomization into account
+function effectivePage(pagenum) {
+	var index = moved.indexOf(pagenum);
+	if(index == -1) {
+		return pagenum;
+	}else{
+		return movedto[index];
+	}
+}
+
+var numberText = []; //stores divs which need to be updated when the page changes
+var pntexts = []; //texts in them
+function makePageNumber(text) { //text: something like "Page 1 / 4"
+	var temp = text.split(1);
+	var texts = [temp[0], temp[1]];
+	//the following is needed if there are more 1's (e.g. if the total # of pages contains the digit 1)
+	if(temp.length > 2) {
+		for(var i = 2; i < temp.length; i++) {
+			texts[1] += 1 + temp[i];
+		}
+	}
+	document.writeln("<p><div id='pagenumberdiv" + numberText.length + "'></div></p>");
+	loadPageNumber(("pagenumberdiv" + numberText.length), texts);
+}
+function loadPageNumber(id, texts) {
+	var newone = document.getElementById(id);
+	numberText.push(newone);
+	pntexts.push(texts);
+	updatePageNumbers();
+}
+function updatePageNumbers() {
+	for(var i = 0; i < numberText.length; i++) {
+		numberText[i].innerHTML = pntexts[i][0] + current + pntexts[i][1];
+	}
+}
+
+//make one vanish and the other appear
+function swap(vanish, appear) {
+	document.getElementById(vanish).style.display = "none";
+	//document.getElementById(appear).style.display = "inline";
+	document.getElementById(appear).style.display = "";
+	updatePageNumbers();
+}
+
+//go to the next page
+function next() {
+	current++;
+	swap(effectivePage(current - 1), effectivePage(current));
+}
+
+function back() {
+	current--;
+	swap(effectivePage(current + 1), effectivePage(current));
+}
+
+//shuffles the array
+//taken from http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
+Array.prototype.shuffle = function () {
+    for (var i = this.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = this[i];
+        this[i] = this[j];
+        this[j] = tmp;
+    }
+
+    return this;
+}
+
+//randomize the order of trials i through j
+//note: don't call this on the same index twice!
+function randomize(i, j) {
+	ar = [];
+	ar2 = [];
+	for(var k = i; k <= j; k++) {
+		ar.push(k);
+		ar2.push(k);
+	}
+	ar2.shuffle();
+	for(var k = 0; k < ar.length; k++) {
+		if(moved.indexOf(ar[k]) != -1) {
+			alert("Error: same index randomized twice.");
+		}else{
+			moved.push(ar[k]);
+			movedto.push(ar2[k]);
+		}
+	}
+}
+
+randomize(3, 44); // Randomizes pages 3-44
+
+randomize(45, 86);
+
+//var randomID = Math.floor((Math.random() * 100) + 1);
+
+function updateAudio(newValue, word, step)
+{
+        var location = "http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/";
+//        var count = document.getElementById("playcount").innerHTML;
+//        count = parseInt(count) + parseInt(1);
+//        document.getElementById("playcount").innerHTML = count;
+        document.getElementById("audioplaying").autoplay = true;
+        document.getElementById("audioplaying").src = location+word+"_"+step+"_"+newValue+".wav";
+}
+</script>
+
+<style type="text/css">
+.wrapper {
+	height: 80%;
+	width: 100%;
+	display: table;
+}
+
+.page {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.cell {
+	margin: 0 auto;
+	padding: 10px;
+	width: 850px;
+}
+
+#pagenum {
+	text-align: center;
+	font-style: italic;
+}
+.disclaimer {
+	font-weight: bold;
+	color: #555555;
+}
+
+.warning {
+	font-weight: bold;
+}
+
+body {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+</style>
+
+<style></style></head><body><div class="wrapper">
+
+<div class="page" id="1">
+<div class="cell">
+
+<div align="center"><h1>Voice Matching Game</h1></div>
+
+<div class="disclaimer">By answering the following questions, you are participating in a study being performed by linguists in the UC Berkeley Linguistics Department. Your anonymity is assured; the researchers who have requested your participation will not receive any personal information about you. There is a link to a  questionnaire at the end of the task. If you do not complete the questionnaire, your HIT will be rejected.</div>
+
+<br>
+<br>
+
+
+
+<!--<div class="warning">Please only complete this HIT once. You will not be paid for retakes. If you have already completed this HIT or any other version of this HIT and submit it again, all submissions but the first will be rejected, and you will only be paid for the first submission. Having a submission rejected is detrimental to your reputation as a worker, and may prevent you from completing HITs in the future.</div>
+<br />-->
+
+<p>In this study, you will be presented with audio recordings of whispered English words.  For each recording, listen to a series of synthetic voices and then choose the voice that you feel would most likely belong to the whisperer. Please do this experiment in one sitting, without taking any breaks.</p>
+
+<p><b>Sound requirements:</b></p>
+<ul>
+    <li>Please be sure to complete this experiment in a quiet environment without any distractions.</li>
+    <li>Please use headphones rather than speakers if at all possible.</li>
+    <li>Please be sure the volume of your computer is turned up to the highest comfortable level.</li>
+</ul>
+
+<p>Please read the linked <a href="https://drive.google.com/file/d/12fYocftRxDbSdkYykWs-8oHFcY3aXLt5/view?usp=sharing", target="_blank">consent form</a> and answer the questions below</p>
+<br>
+
+
+
+Do you consent to participate in this study?<br>
+
+<input type="radio" name="consParticipate" id="consParticipateYes" value="yes"> Yes, I consent to participate.<br>
+<input type="radio" name="consParticipate" id="consParticipateNo" value="no"> No, I do not consent to participate.
+
+<p>
+
+Do you consent to the release of your demographic information (age, languages spoken, formal education, places lived) during the process of research dissemination?<i> This information will never be linked to your identifying information.</i><br>
+<input type="radio" name="consRelease" value="yes" checked> Yes, I consent to release of my demographic information.<br>
+<input type="radio" name="consRelease" value="no"> No, I do not consent to release of my demographic information.
+
+<br>
+
+
+
+<input type="button" value="Continue" onclick="var val = document.getElementById('consParticipateYes'); if( val.checked ) {next(); } else{ alert('Please indicate your consent to participate to continue.'); }">
+
+<!---<input type="button" value="Continue" onclick="var val = document.getElementById('consParticipate').value; if (val == 'yes') {next(); }else{ alert('Please indicate your consent to participate to continue.'); }">-->
+
+</div>
+</div>
+
+<div class="page" id="2" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>Sound Test</h1></div>
+<script>
+var audio_test_word = "puppy";
+</script>
+<p><b>Sound test:</b></p>
+<p>To ensure that your audio is working properly, you must complete the following sound test. Click on the button below to play an English word, and type the word in the box provided. Then press the start button to proceed. If you enter the word incorrectly, you will be prompted to retry until you have entered it correctly.</p>
+<audio src="https://upload.wikimedia.org/wikipedia/commons/a/a2/En-us-puppy.ogg" type="audio/wav" preload="auto" controls="controls" oncontextmenu="return false;">Audio could not be loaded.</audio>
+<br><br>
+<input type="text" id="audio_test_word_input" name="audiotest">
+<br><br>
+<input type="button" value="Start" onclick="var val = document.getElementById('audio_test_word_input').value; if(val.toLowerCase() == audio_test_word) { next(); }else{ alert('Please enter the word from the sound clip.'); }">
+
+</div>
+</div>
+
+<div class="page" id="3" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_1_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="4" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_2_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="5" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_3_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="6" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_4_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="7" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_5_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="8" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_6_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="9" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_7_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="10" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_1_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="11" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_2_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="12" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_3_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="13" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_4_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="14" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_5_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="15" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_6_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+</div>
+</div>
+
+
+<div class="page" id="16" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_7_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="17" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_1_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="18" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_2_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="19" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_3_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="20" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_4_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="21" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_5_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="22" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_6_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="23" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_7_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="24" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_1_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="25" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_2_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="26" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_3_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="27" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_4_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="28" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_5_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="29" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_6_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="30" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_7_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="31" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_1_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="32" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_2_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="33" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_3_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="34" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_4_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="35" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_5_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="36" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_6_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="37" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_7_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="38" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_1_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="39" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_2_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="40" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_3_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="41" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_4_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="42" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_5_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="43" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_6_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="44" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_7_selection_tr1" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<!---Block 2--->
+
+<div class="page" id="45" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_1_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="46" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_2_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="47" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_3_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="48" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_4_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="49" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_5_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="50" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_6_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="51" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>boil</h1></div>
+
+<p></p>
+Listen to this whispered "boil".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/boil_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="boil_7_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'boil',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="52" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_1_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="53" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_2_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="54" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_3_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="55" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_4_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="56" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_5_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="57" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_6_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+</div>
+</div>
+
+
+<div class="page" id="58" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>breed</h1></div>
+
+<p></p>
+Listen to this whispered "breed".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/breed_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="breed_7_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'breed',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="59" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_1_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="60" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_2_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="61" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_3_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="62" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_4_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="63" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_5_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="64" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_6_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="65" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>glue</h1></div>
+
+<p></p>
+Listen to this whispered "glue".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/glue_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="glue_7_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'glue',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="66" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_1_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="67" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_2_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="68" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_3_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="69" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_4_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="70" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_5_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="71" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_6_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="72" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>rare</h1></div>
+
+<p></p>
+Listen to this whispered "rare".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/rare_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="rare_7_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'rare',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="73" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_1_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="74" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_2_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="75" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_3_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="76" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_4_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="77" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_5_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="78" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_6_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="79" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>row</h1></div>
+
+<p></p>
+Listen to this whispered "row".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/row_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="row_7_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'row',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="80" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_1.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_1_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_1_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',1)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="81" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_2.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_2_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_2_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',2)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="82" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_3.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_3_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_3_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',3)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="83" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_4.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_4_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_4_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',4)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="84" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_5.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_5_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_5_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',5)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="85" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_6.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_6_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_6_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',6)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+<div class="page" id="86" style="display: none;">
+<div class="cell">
+
+<div align="center"><h1>wall</h1></div>
+
+<p></p>
+Listen to this whispered "wall".
+<p>
+<audio type="audio/wav" controls="controls" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_w_7.wav">
+Audio could not be loaded.
+</audio>
+</p><p>
+
+</p><p>Now choose the voice that belongs to the whisperer.
+<i>Click on the slider bar to hear the voices!</i>
+
+</p><p>
+<audio id="audioplaying" src="http://linguistics.berkeley.edu/~susanlin/mturk_remirez/stimuli/wall_7_5.wav" type="audio/wav">Audio could not be loaded.</audio>
+<input name="wall_7_selection_tr2" id="audioselection" type="range" min="1" max="9" value="0" step="1" onclick="updateAudio(this.value,'wall',7)">
+
+</p><p>
+<input type="button" value="Confirm this selection and continue" onclick="next();">
+</p>
+
+
+</div>
+</div>
+
+
+<div class="page" id="87" style="display: none;">
+<div class="cell">
+
+<p>Thank you very much for participating in this study.</p>
+<p>Please go to the Google Form to complete the questionnaire. Your HIT will not be accepted unless you complete it.</p>
+<p>Your random number is </p>
+ <input type="text" name="subjectID" id="randomID" value=randomID> 
+
+<script>
+document.getElementById("randomID").innerHTML = Math.floor((Math.random() * 1000) + 1);
+</script>
+<a href="https://goo.gl/forms/zja3nBrZHBiu3FlL2" target="_blank"> Go to form </a>
+<br><br>
+
+<input type="button" value="I have submitted the form" onclick="next();">
+
+</div>
+</div>
+
+
+<div class="page" id="88" style="display: none;">
+<div class="cell">
+
+<p>Thank you for your help!</p>
+<br>
+<input type="submit" value="Submit">
+
+</div>
+</div>
+
+</div>
+
+<center><script>makePageNumber("Page 1 / 88");</script><p></p>
+</center>
+</body></html>
