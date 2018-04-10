@@ -5,3 +5,5 @@ This is a speech perception experiment which was run on Amazon Mechanical Turk D
 The experiment is presented in HTML and JavaScript. 
 
 It presents listeners with synthesized whispers and asks them to match the whisper to a synthesized modally phonated voice. 
+
+This code was written by graduate student Emily Remirez and faculty advisor Prof Susan Lin, UC Berkeley Department of Linguistics
